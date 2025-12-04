@@ -266,7 +266,17 @@ export default function HomeHero({ activeTab = 'all', onTabChange }: HomeHeroPro
             {/* Right: Wallet Icon */}
             <div className="flex items-center">
               <button
-                  className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center hover:bg-orange-200 transition-colors shadow-sm border border-orange-200"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors shadow-sm border"
+                style={{
+                  backgroundColor: theme.primary[3] || theme.primary[2],
+                  borderColor: theme.primary[2] || theme.primary[1],
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = theme.primary[2] || theme.primary[1];
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = theme.primary[3] || theme.primary[2];
+                }}
                 aria-label="Wallet"
               >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
