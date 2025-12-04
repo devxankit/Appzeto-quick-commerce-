@@ -252,12 +252,12 @@ export default function HomeHero({ activeTab = 'all', onTabChange }: HomeHeroPro
           {/* Left: Text content */}
             <div className="flex-1 pr-2">
               {/* Service name - small, dark */}
-              <div className="text-neutral-800 font-medium text-[10px] mb-0 leading-tight">appzeto-quick</div>
+              <div className="text-neutral-800 font-medium text-[10px] mb-0 leading-tight">Appzeto Quick Commerce</div>
               {/* Delivery time - large, bold, dark grey/black */}
               <div className="text-neutral-900 font-extrabold text-2xl mb-0.5 leading-tight">14 minutes</div>
               {/* Location with dropdown indicator */}
               <div className="text-neutral-700 text-[10px] flex items-center gap-0.5 leading-tight">
-                <span className="line-clamp-1">North Block, Central Secretariat, Delhi Division, New Delhi, Delhi</span>
+                <span className="line-clamp-1">Appzeto, Princess Center, New Palasia, Indore, Madhya Pradesh</span>
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
                   <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
