@@ -78,13 +78,32 @@ export default function Checkout() {
   const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
   const [showPartyPopper, setShowPartyPopper] = useState(false);
   const [hasAppliedCouponBefore, setHasAppliedCouponBefore] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+  const [snapshotCartItems, setSnapshotCartItems] = useState(cart.items);
   
-  // Redirect to homepage if cart is empty
+  // Update snapshot when cart has items (so we have content to show during exit)
   useEffect(() => {
-    if (cart.items.length === 0 && !showToast) {
-      navigate('/');
+    if (cart.items.length > 0) {
+      setSnapshotCartItems([...cart.items]); // Create a copy
     }
-  }, [cart.items.length, showToast, navigate]);
+  }, [cart.items]);
+  
+  // Redirect to homepage if cart is empty with smooth animation
+  useEffect(() => {
+    if (cart.items.length === 0 && !showToast && !isExiting) {
+      // Only start exit if we have snapshot items to show
+      if (snapshotCartItems.length > 0) {
+        setIsExiting(true);
+        // Wait for animation to complete before navigating
+        setTimeout(() => {
+          navigate('/');
+        }, 400); // Match animation duration
+      } else {
+        // If no snapshot, navigate immediately
+        navigate('/');
+      }
+    }
+  }, [cart.items.length, showToast, navigate, isExiting, snapshotCartItems.length]);
 
   // Load saved address on mount
   useEffect(() => {
@@ -100,8 +119,17 @@ export default function Checkout() {
     }
   }, []);
 
+  // During exit animation, use snapshot to keep content visible
+  const displayItems = isExiting && snapshotCartItems.length > 0 ? snapshotCartItems : cart.items;
+  const displayCart = {
+    ...cart,
+    items: displayItems,
+    itemCount: displayItems.reduce((sum, item) => sum + item.quantity, 0),
+    total: displayItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+  };
+
   // Get first cart item for similar products
-  const cartItem = cart.items[0];
+  const cartItem = displayItems[0];
   const similarProducts = useMemo(() => {
     if (cartItem) {
       return getSimilarProducts(cartItem.product.id);
@@ -109,24 +137,25 @@ export default function Checkout() {
     return products.slice(0, 6);
   }, [cartItem]);
 
-  // Don't render anything if cart is empty (will redirect via useEffect)
-  if (cart.items.length === 0 && !showToast) {
+  // Don't render anything if cart is empty and not transitioning (will redirect via useEffect)
+  // But allow rendering during exit animation
+  if (cart.items.length === 0 && !showToast && !isExiting) {
     return null;
   }
 
   // Calculate totals for billing section
-  const itemsTotal = cart.items.reduce((sum, item) => {
+  const itemsTotal = displayItems.reduce((sum, item) => {
     const itemPrice = item.product.mrp && item.product.mrp > item.product.price 
       ? item.product.mrp 
       : item.product.price;
     return sum + (itemPrice * item.quantity);
   }, 0);
   
-  const discountedTotal = cart.total;
+  const discountedTotal = displayCart.total;
   const savedAmount = itemsTotal - discountedTotal;
   const handlingCharge = 2;
-  const deliveryCharge = cart.total >= 199 ? 0 : 40;
-  const amountNeededForFreeDelivery = Math.max(0, 199 - cart.total);
+  const deliveryCharge = displayCart.total >= 199 ? 0 : 40;
+  const amountNeededForFreeDelivery = Math.max(0, 199 - displayCart.total);
   
   // Calculate coupon discount
   let couponDiscount = 0;
@@ -196,7 +225,16 @@ export default function Checkout() {
   };
 
   return (
-    <div className="pb-24 bg-white min-h-screen flex flex-col">
+    <motion.div
+      initial={{ opacity: 1, y: 0 }}
+      animate={{ 
+        opacity: isExiting ? 0 : 1,
+        y: isExiting ? -20 : 0
+      }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4, ease: 'easeInOut' }}
+      className="pb-24 bg-white min-h-screen flex flex-col"
+    >
       {/* Toast Notification */}
       <Toast
         message="Order placed"
@@ -313,11 +351,11 @@ export default function Checkout() {
             <span className="text-xs font-semibold text-neutral-900">Delivery in 8 minutes</span>
           </div>
           
-          <p className="text-[10px] text-neutral-600 mb-2.5">Shipment of {cart.itemCount} {cart.itemCount === 1 ? 'item' : 'items'}</p>
+          <p className="text-[10px] text-neutral-600 mb-2.5">Shipment of {displayCart.itemCount} {displayCart.itemCount === 1 ? 'item' : 'items'}</p>
 
           {/* Cart Items */}
           <div className="space-y-2.5">
-            {cart.items.map((item) => (
+            {displayItems.map((item) => (
               <div key={item.product.id} className="flex gap-2">
                 {/* Product Image */}
                 <div className="w-12 h-12 bg-neutral-100 rounded-lg flex-shrink-0 overflow-hidden">
@@ -1015,6 +1053,6 @@ export default function Checkout() {
           </button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

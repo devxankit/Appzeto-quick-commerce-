@@ -1,5 +1,6 @@
-import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { products } from '../data/products';
 import { getTheme } from '../utils/themes';
 import { useCart } from '../context/CartContext';
@@ -11,7 +12,18 @@ interface LowestPricesEverProps {
 export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEverProps) {
   const theme = getTheme(activeTab);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { addToCart } = useCart();
+  const navigate = useNavigate();
+  const { cart, addToCart, updateQuantity } = useCart();
+  const [forceUpdate, setForceUpdate] = useState(0); // State to force re-renders
+
+  // Create a wrapper for addToCart that forces re-render
+  const handleAddToCart = (product: any, element?: HTMLElement | null) => {
+    addToCart(product, element);
+    // Force re-render after cart update
+    setTimeout(() => {
+      setForceUpdate(v => v + 1);
+    }, 0);
+  };
 
   // Get products with discounts for this section, filtered by activeTab
   const getFilteredProducts = () => {
@@ -135,15 +147,22 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
           // Calculate discount
           const discount = product.mrp ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0;
 
+          // Get quantity in cart
+          const cartItem = cart.items.find(item => item.product.id === product.id);
+          const inCartQty = cartItem?.quantity || 0;
+
           return (
             <div
-              key={product.id}
+              key={`${product.id}-${forceUpdate}`}
               className="flex-shrink-0 w-[140px]"
               style={{ scrollSnapAlign: 'start' }}
             >
               <div className="bg-white rounded-lg overflow-hidden flex flex-col relative h-full" style={{ boxShadow: '0 1px 1px rgba(0, 0, 0, 0.03)' }}>
                 {/* Product Image Area */}
-                <Link to={`/product/${product.id}`} className="relative block">
+                <div
+                  onClick={() => navigate(`/product/${product.id}`)}
+                  className="relative block cursor-pointer"
+                >
                   <div className="w-full h-28 bg-neutral-100 flex items-center justify-center overflow-hidden relative">
                     {product.imageUrl ? (
                       <img
@@ -192,19 +211,76 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
                       </svg>
                     </button>
 
-                    {/* ADD Button - Overlaid on bottom right of image */}
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addToCart(product, e.currentTarget);
-                      }}
-                      className="absolute bottom-1.5 right-1.5 z-10 bg-white/95 backdrop-blur-sm text-green-600 border-2 border-green-600 text-[10px] font-semibold px-2 py-1 rounded shadow-md hover:bg-white transition-colors"
-                    >
-                      ADD
-                    </button>
+                    {/* ADD Button or Quantity Stepper - Overlaid on bottom right of image */}
+                    <div className="absolute bottom-1.5 right-1.5 z-10">
+                      <AnimatePresence mode="wait">
+                        {inCartQty === 0 ? (
+                          <motion.button
+                            key="add-button"
+                            type="button"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleAddToCart(product, e.currentTarget);
+                            }}
+                            className="bg-white/95 backdrop-blur-sm text-green-600 border-2 border-green-600 text-[10px] font-semibold px-2 py-1 rounded shadow-md hover:bg-white transition-colors"
+                          >
+                            ADD
+                          </motion.button>
+                        ) : (
+                          <motion.div
+                            key="stepper"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.2 }}
+                            className="flex items-center gap-1 bg-green-600 rounded px-1.5 py-1 shadow-md"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <motion.button
+                              whileTap={{ scale: 0.9 }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                updateQuantity(product.id, inCartQty - 1);
+                              }}
+                              className="w-4 h-4 flex items-center justify-center text-white font-bold hover:bg-green-700 rounded transition-colors p-0 leading-none"
+                              style={{ lineHeight: 1, fontSize: '14px' }}
+                            >
+                              <span className="relative top-[-1px]">−</span>
+                            </motion.button>
+                            <motion.span
+                              key={inCartQty}
+                              initial={{ scale: 1.2, y: -2 }}
+                              animate={{ scale: 1, y: 0 }}
+                              transition={{ type: 'spring', stiffness: 500, damping: 15 }}
+                              className="text-white font-bold min-w-[0.75rem] text-center"
+                              style={{ fontSize: '12px' }}
+                            >
+                              {inCartQty}
+                            </motion.span>
+                            <motion.button
+                              whileTap={{ scale: 0.9 }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                updateQuantity(product.id, inCartQty + 1);
+                              }}
+                              className="w-4 h-4 flex items-center justify-center text-white font-bold hover:bg-green-700 rounded transition-colors p-0 leading-none"
+                              style={{ lineHeight: 1, fontSize: '14px' }}
+                            >
+                              <span className="relative top-[-1px]">+</span>
+                            </motion.button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
-                </Link>
+                </div>
 
                 {/* Product Details */}
                 <div className="p-1.5 flex-1 flex flex-col" style={{ background: '#fef9e7' }}>
@@ -221,11 +297,14 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
                   </div>
 
                   {/* Product Name */}
-                  <Link to={`/product/${product.id}`} className="mb-0.5">
+                  <div
+                    onClick={() => navigate(`/product/${product.id}`)}
+                    className="mb-0.5 cursor-pointer"
+                  >
                     <h3 className="text-[10px] font-bold text-neutral-900 line-clamp-2 leading-tight">
                       {product.name}
                     </h3>
-                  </Link>
+                  </div>
 
                   {/* Rating and Reviews */}
                   <div className="flex items-center gap-0.5 mb-0.5">
