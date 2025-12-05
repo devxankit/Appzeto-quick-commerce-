@@ -139,10 +139,10 @@ const getCategoryCards = (activeTab: string): PromoCard[] => {
       { id: 'winter-accessories', badge: 'Up to 50% OFF', title: 'Winter Accessories', categoryId: 'fashion', bgColor: 'bg-blue-50' },
     ],
     electronics: [
-      { id: 'mobile-phones', badge: 'Up to 40% OFF', title: 'Mobile Phones', categoryId: 'electronics', bgColor: 'bg-purple-50' },
-      { id: 'laptops', badge: 'Up to 35% OFF', title: 'Laptops', categoryId: 'electronics', bgColor: 'bg-purple-50' },
-      { id: 'accessories', badge: 'Up to 50% OFF', title: 'Accessories', categoryId: 'electronics', bgColor: 'bg-purple-50' },
-      { id: 'gadgets', badge: 'Up to 45% OFF', title: 'Gadgets', categoryId: 'electronics', bgColor: 'bg-purple-50' },
+      { id: 'mobile-phones', badge: 'Up to 40% OFF', title: 'Mobile Phones', categoryId: 'electronics', bgColor: 'bg-yellow-50' },
+      { id: 'laptops', badge: 'Up to 35% OFF', title: 'Laptops', categoryId: 'electronics', bgColor: 'bg-yellow-50' },
+      { id: 'accessories', badge: 'Up to 50% OFF', title: 'Accessories', categoryId: 'electronics', bgColor: 'bg-yellow-50' },
+      { id: 'gadgets', badge: 'Up to 45% OFF', title: 'Gadgets', categoryId: 'electronics', bgColor: 'bg-yellow-50' },
     ],
     beauty: [
       { id: 'makeup', badge: 'Up to 60% OFF', title: 'Makeup', categoryId: 'personal-care', bgColor: 'bg-pink-50' },
@@ -157,10 +157,10 @@ const getCategoryCards = (activeTab: string): PromoCard[] => {
       { id: 'snacks', badge: 'Up to 35% OFF', title: 'Snacks', categoryId: 'snacks', bgColor: 'bg-green-50' },
     ],
     fashion: [
-      { id: 'clothing', badge: 'Up to 60% OFF', title: 'Clothing', categoryId: 'fashion', bgColor: 'bg-yellow-50' },
-      { id: 'footwear', badge: 'Up to 55% OFF', title: 'Footwear', categoryId: 'fashion', bgColor: 'bg-yellow-50' },
-      { id: 'accessories', badge: 'Up to 50% OFF', title: 'Accessories', categoryId: 'fashion', bgColor: 'bg-yellow-50' },
-      { id: 'jewelry', badge: 'Up to 45% OFF', title: 'Jewelry', categoryId: 'fashion', bgColor: 'bg-yellow-50' },
+      { id: 'clothing', badge: 'Up to 60% OFF', title: 'Clothing', categoryId: 'fashion', bgColor: 'bg-purple-50' },
+      { id: 'footwear', badge: 'Up to 55% OFF', title: 'Footwear', categoryId: 'fashion', bgColor: 'bg-purple-50' },
+      { id: 'accessories', badge: 'Up to 50% OFF', title: 'Accessories', categoryId: 'fashion', bgColor: 'bg-purple-50' },
+      { id: 'jewelry', badge: 'Up to 45% OFF', title: 'Jewelry', categoryId: 'fashion', bgColor: 'bg-purple-50' },
     ],
     sports: [
       { id: 'fitness', badge: 'Up to 50% OFF', title: 'Fitness', categoryId: 'sports', bgColor: 'bg-blue-50' },

@@ -87,8 +87,12 @@ const tabs: Tab[] = [
     label: 'Fashion',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C10.8954 2 10 2.89543 10 4V6H8C6.89543 6 6 6.89543 6 8V20C6 21.1046 6.89543 22 8 22H16C17.1046 22 18 21.1046 18 20V8C18 6.89543 17.1046 6 16 6H14V4C14 2.89543 13.1046 2 12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M10 12H14M10 16H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M4 9.5C4 8.39543 4.89543 7.5 6 7.5H9C10.1046 7.5 11 8.39543 11 9.5V14.5C11 15.6046 10.1046 16.5 9 16.5H6C4.89543 16.5 4 15.6046 4 14.5V9.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M13 9.5C13 8.39543 13.8954 7.5 15 7.5H18C19.1046 7.5 20 8.39543 20 9.5V14.5C20 15.6046 19.1046 16.5 18 16.5H15C13.8954 16.5 13 15.6046 13 14.5V9.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11 12L13 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M4 12L2 12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M20 12L22 12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M6 8.5L9 8.5M15 8.5L18 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
   },
