@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HomeHero from '../components/HomeHero';
 import PromoStrip from '../components/PromoStrip';
@@ -19,6 +19,7 @@ import {
 export default function Home() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
+  const productsSectionRef = useRef<HTMLDivElement>(null);
 
   // Map tab IDs to category IDs or filter logic
   const getFilteredProducts = (tabId: string) => {
@@ -39,6 +40,18 @@ export default function Home() {
 
   const filteredProducts = useMemo(() => getFilteredProducts(activeTab), [activeTab]);
 
+  // Scroll to products section when tab changes (except 'all')
+  useEffect(() => {
+    if (activeTab !== 'all' && productsSectionRef.current) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        productsSectionRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+  }, [activeTab]);
 
   return (
     <div className="pb-4">
@@ -55,7 +68,7 @@ export default function Home() {
       <div className="bg-neutral-50 -mt-2 pt-1 space-y-5">
         {/* Filtered Products Section - Show when tab is not "All" */}
         {activeTab !== 'all' && (
-          <div className="mt-6 mb-6">
+          <div ref={productsSectionRef} className="mt-6 mb-6">
             <h2 className="text-lg font-semibold text-neutral-900 mb-3 px-4 tracking-tight capitalize">
               {activeTab === 'grocery' ? 'Grocery Items' : activeTab}
             </h2>
