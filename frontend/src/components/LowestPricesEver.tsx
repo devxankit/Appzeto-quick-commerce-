@@ -21,7 +21,7 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
   useEffect(() => {
     if (document.fonts && document.fonts.check) {
       // Check if font is already loaded
-      if (document.fonts.check('1em "Rubik Doodle Shadow"')) {
+      if (document.fonts.check('1em "Poppins"')) {
         setFontLoaded(true);
         return;
       }
@@ -29,7 +29,7 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
       // Wait for font to load
       const checkFont = async () => {
         try {
-          await document.fonts.load('1em "Rubik Doodle Shadow"');
+          await document.fonts.load('1em "Poppins"');
           setFontLoaded(true);
         } catch (e) {
           // Fallback: show after timeout
@@ -140,7 +140,7 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
           <h2 
             className="font-black text-center whitespace-nowrap"
               style={{
-                fontFamily: '"Rubik Doodle Shadow", serif',
+                fontFamily: '"Poppins", sans-serif',
                 fontSize: '28px',
                 color: '#000000',
                 opacity: fontLoaded ? 1 : 0,

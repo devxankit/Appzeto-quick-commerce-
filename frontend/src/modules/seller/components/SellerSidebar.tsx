@@ -44,8 +44,8 @@ export default function SellerSidebar({ onClose }: SellerSidebarProps) {
 
   return (
     <aside className="w-64 bg-teal-700 h-screen flex flex-col">
-      {/* Close button */}
-      <div className="flex justify-end p-4 border-b border-teal-600">
+      {/* Close button - only show on mobile */}
+      <div className="flex justify-end p-4 border-b border-teal-600 lg:hidden">
         <button
           onClick={onClose}
           className="p-2 text-teal-100 hover:text-white transition-colors"
@@ -62,19 +62,19 @@ export default function SellerSidebar({ onClose }: SellerSidebarProps) {
           </svg>
         </button>
       </div>
-      <nav className="flex-1 py-6 overflow-y-auto">
-        <ul className="space-y-1 px-4">
+      <nav className="flex-1 py-4 sm:py-6 overflow-y-auto">
+        <ul className="space-y-1 px-2 sm:px-4">
           {menuItems.map((item) => (
             <li key={item.path}>
               <button
                 onClick={() => handleNavigation(item.path)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
+                className={`w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-left transition-colors ${
                   isActive(item.path)
                     ? 'bg-teal-600 text-white'
                     : 'text-teal-100 hover:bg-teal-600/50 hover:text-white'
                 }`}
               >
-                <span className="text-sm font-medium">{item.label}</span>
+                <span className="text-xs sm:text-sm font-medium">{item.label}</span>
                 {item.hasSubmenu && (
                   <svg
                     width="16"

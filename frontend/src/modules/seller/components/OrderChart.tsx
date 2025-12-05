@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface OrderChartProps {
   title: string;
@@ -7,7 +7,7 @@ interface OrderChartProps {
   height?: number;
 }
 
-export default function OrderChart({ title, data, maxValue, height = 600 }: OrderChartProps) {
+export default function OrderChart({ title, data, maxValue, height = 400 }: OrderChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
   const [zoom, setZoom] = useState(1);
@@ -17,13 +17,33 @@ export default function OrderChart({ title, data, maxValue, height = 600 }: Orde
   const [isDragging, setIsDragging] = useState(false);
   const [brushStart, setBrushStart] = useState<number | null>(null);
   const [brushEnd, setBrushEnd] = useState<number | null>(null);
+  const [chartWidth, setChartWidth] = useState(1200);
   
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const chartWidth = 1200;
+  // Responsive chart dimensions
+  useEffect(() => {
+    const updateChartWidth = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        if (containerWidth < 640) {
+          setChartWidth(400);
+        } else if (containerWidth < 1024) {
+          setChartWidth(600);
+        } else {
+          setChartWidth(1200);
+        }
+      }
+    };
+
+    updateChartWidth();
+    window.addEventListener('resize', updateChartWidth);
+    return () => window.removeEventListener('resize', updateChartWidth);
+  }, []);
+
   const chartHeight = height;
-  const padding = { top: 40, right: 20, bottom: 110, left: 40 };
+  const padding = { top: 30, right: 15, bottom: 80, left: 30 };
   const graphWidth = chartWidth - padding.left - padding.right;
   const graphHeight = chartHeight - padding.top - padding.bottom;
 
@@ -34,26 +54,77 @@ export default function OrderChart({ title, data, maxValue, height = 600 }: Orde
     return { x, y, value: item.value, date: item.date, index };
   });
 
-  // Create smooth curve path using quadratic bezier curves
+  // Create smooth curvy path using cubic Bezier curves that stay above x-axis
   const createSmoothPath = () => {
     if (points.length < 2) return '';
+    if (points.length === 2) {
+      return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
+    }
+    
+    const xAxisY = padding.top + graphHeight; // X-axis position (bottom of chart)
     
     let path = `M ${points[0].x} ${points[0].y}`;
     
-    for (let i = 1; i < points.length; i++) {
-      const curr = points[i];
+    // Use cubic Bezier curves for smooth, curvy transitions
+    for (let i = 0; i < points.length - 1; i++) {
+      const current = points[i];
       const next = points[i + 1];
       
-      if (next) {
-        // Use control point between current and next for smooth curve
-        const cp1x = curr.x;
-        const cp1y = curr.y;
-        const cp2x = (curr.x + next.x) / 2;
-        const cp2y = (curr.y + next.y) / 2;
-        path += ` Q ${cp1x} ${cp1y} ${cp2x} ${cp2y}`;
+      let cp1x, cp1y, cp2x, cp2y;
+      
+      if (i === 0) {
+        // First segment: create smooth curve towards next point
+        const dx = next.x - current.x;
+        const dy = next.y - current.y;
+        cp1x = current.x + dx * 0.4;
+        cp1y = current.y + dy * 0.4;
+        cp2x = current.x + dx * 0.6;
+        cp2y = current.y + dy * 0.6;
+      } else if (i === points.length - 2) {
+        // Last segment: create smooth curve from previous point
+        const prev = points[i - 1];
+        const dx = next.x - prev.x;
+        const dy = next.y - prev.y;
+        cp1x = current.x + dx * 0.2;
+        cp1y = current.y + dy * 0.2;
+        cp2x = next.x - dx * 0.2;
+        cp2y = next.y - dy * 0.2;
       } else {
-        path += ` L ${curr.x} ${curr.y}`;
+        // Middle segments: use Catmull-Rom style control points for smooth curves
+        const prev = points[i - 1];
+        const nextNext = points[i + 2];
+        
+        // Calculate tangent vectors for smooth curve
+        const t1x = (next.x - prev.x) * 0.3;
+        const t1y = (next.y - prev.y) * 0.3;
+        const t2x = (nextNext.x - current.x) * 0.3;
+        const t2y = (nextNext.y - current.y) * 0.3;
+        
+        cp1x = current.x + t1x;
+        cp1y = current.y + t1y;
+        cp2x = next.x - t2x;
+        cp2y = next.y - t2y;
       }
+      
+      // Constrain control points to prevent curve from going below x-axis
+      // Find the minimum Y value among current, next, and x-axis
+      const minAllowedY = Math.min(current.y, next.y, xAxisY);
+      
+      // Ensure control points don't go below the minimum allowed Y
+      cp1y = Math.max(cp1y, minAllowedY);
+      cp2y = Math.max(cp2y, minAllowedY);
+      
+      // Also ensure they don't go below x-axis
+      cp1y = Math.min(cp1y, xAxisY);
+      cp2y = Math.min(cp2y, xAxisY);
+      
+      // Additional constraint: ensure control points create smooth curves
+      // by keeping them within reasonable bounds relative to data points
+      const maxY = Math.max(current.y, next.y);
+      cp1y = Math.min(cp1y, maxY + (maxY - minAllowedY) * 0.2);
+      cp2y = Math.min(cp2y, maxY + (maxY - minAllowedY) * 0.2);
+      
+      path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${next.x} ${next.y}`;
     }
     
     return path;
@@ -261,10 +332,10 @@ export default function OrderChart({ title, data, maxValue, height = 600 }: Orde
   const brushCoords = getBrushCoordinates();
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-neutral-200 p-3 hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white rounded-xl shadow-lg border border-neutral-200 p-2 sm:p-3 md:p-4 hover:shadow-xl transition-shadow duration-300">
       {/* Chart Header */}
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xl font-bold text-neutral-900">{title}</h3>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 sm:mb-4 gap-2 sm:gap-0">
+        <h3 className="text-base sm:text-lg md:text-xl font-bold text-neutral-900">{title}</h3>
         <div className="flex items-center gap-2">
           {/* Zoom Controls */}
           <button

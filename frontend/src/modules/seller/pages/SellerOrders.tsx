@@ -12,15 +12,15 @@ export default function SellerOrders() {
   };
 
   return (
-    <div className="space-y-6 -mx-6 -mt-6">
+    <div className="space-y-4 sm:space-y-6 -mx-3 sm:-mx-4 md:-mx-6 -mt-3 sm:-mt-4 md:-mt-6">
       {/* Header Section */}
-      <div className="bg-white border-b border-neutral-200 px-6 py-4">
-        <div className="flex items-center justify-between">
+      <div className="bg-white border-b border-neutral-200 px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
           {/* Page Title */}
-          <h1 className="text-2xl font-bold text-neutral-900">Orders List</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900">Orders List</h1>
           
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
             <Link to="/seller" className="text-blue-600 hover:text-blue-700">
               Home
             </Link>
@@ -31,30 +31,30 @@ export default function SellerOrders() {
       </div>
 
       {/* Main Content */}
-      <div className="px-6">
+      <div className="px-3 sm:px-4 md:px-6">
         {/* White Card Container */}
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
           {/* Green Banner */}
-          <div className="bg-green-600 text-white px-6 py-3 rounded-t-lg">
-            <h2 className="text-lg font-semibold">View Order List</h2>
+          <div className="bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-t-lg">
+            <h2 className="text-base sm:text-lg font-semibold">View Order List</h2>
           </div>
 
           {/* Filter and Action Bar */}
-          <div className="px-6 py-4 border-b border-neutral-200">
-            <div className="flex flex-wrap items-center gap-4">
+          <div className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 border-b border-neutral-200">
+            <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 sm:gap-4">
               {/* Date Range Filter */}
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium text-neutral-700 whitespace-nowrap">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+                <label className="text-xs sm:text-sm font-medium text-neutral-700 whitespace-nowrap">
                   From - To Order Date
                 </label>
-                <div className="flex items-center gap-2 bg-neutral-100 border border-neutral-300 rounded px-3 py-2">
+                <div className="flex items-center gap-2 bg-neutral-100 border border-neutral-300 rounded px-2 sm:px-3 py-1.5 sm:py-2 w-full sm:w-auto">
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="text-neutral-500"
+                    className="text-neutral-500 flex-shrink-0"
                   >
                     <path
                       d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z"
@@ -68,13 +68,13 @@ export default function SellerOrders() {
                     type="text"
                     value={dateRange}
                     onChange={(e) => setDateRange(e.target.value)}
-                    className="w-48 text-sm text-neutral-600 bg-transparent focus:outline-none placeholder:text-neutral-400"
+                    className="flex-1 sm:w-48 text-xs sm:text-sm text-neutral-600 bg-transparent focus:outline-none placeholder:text-neutral-400"
                     placeholder="MM/DD/YYYY - MM/DD/YYYY"
                   />
                   {dateRange && (
                     <button
                       onClick={handleClearDate}
-                      className="ml-2 px-2 py-1 text-xs font-medium text-neutral-700 bg-neutral-200 hover:bg-neutral-300 rounded transition-colors"
+                      className="ml-2 px-2 py-1 text-xs font-medium text-neutral-700 bg-neutral-200 hover:bg-neutral-300 rounded transition-colors flex-shrink-0"
                     >
                       Clear
                     </button>
@@ -83,14 +83,14 @@ export default function SellerOrders() {
               </div>
 
               {/* Status Filter */}
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium text-neutral-700 whitespace-nowrap">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+                <label className="text-xs sm:text-sm font-medium text-neutral-700 whitespace-nowrap">
                   Status
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="px-3 py-2 border border-neutral-300 rounded text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full sm:w-auto px-3 py-2 border border-neutral-300 rounded text-xs sm:text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
                 >
                   <option>All Status</option>
                   <option>Pending</option>
@@ -102,11 +102,11 @@ export default function SellerOrders() {
               </div>
 
               {/* Entries Per Page */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
                 <select
                   value={entriesPerPage}
                   onChange={(e) => setEntriesPerPage(e.target.value)}
-                  className="px-3 py-2 border border-neutral-300 rounded text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full sm:w-auto px-3 py-2 border border-neutral-300 rounded text-xs sm:text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
                 >
                   <option>10</option>
                   <option>25</option>
@@ -115,15 +115,30 @@ export default function SellerOrders() {
                 </select>
               </div>
 
+              {/* Search Bar */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto sm:flex-1">
+                <label className="text-xs sm:text-sm font-medium text-neutral-700 whitespace-nowrap">
+                  Search:
+                </label>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 w-full sm:w-auto px-3 py-2 border border-neutral-300 rounded text-xs sm:text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  placeholder=""
+                />
+              </div>
+
               {/* Export Button */}
-              <div className="flex items-center gap-2 ml-auto">
-                <button className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors">
+              <div className="flex items-center gap-2 w-full sm:w-auto sm:ml-auto">
+                <button className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-medium transition-colors w-full sm:w-auto">
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="flex-shrink-0"
                   >
                     <path
                       d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15M7 10L12 15M12 15L17 10M12 15V3"
@@ -133,13 +148,14 @@ export default function SellerOrders() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  Export
+                  <span className="hidden sm:inline">Export</span>
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="hidden sm:block flex-shrink-0"
                   >
                     <path
                       d="M6 9L12 15L18 9"
@@ -151,29 +167,15 @@ export default function SellerOrders() {
                   </svg>
                 </button>
               </div>
-
-              {/* Search Bar */}
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium text-neutral-700 whitespace-nowrap">
-                  Search:
-                </label>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="px-3 py-2 border border-neutral-300 rounded text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                  placeholder=""
-                />
-              </div>
             </div>
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto -mx-3 sm:-mx-4 md:-mx-6 px-3 sm:px-4 md:px-6">
+            <table className="w-full min-w-[600px]">
               <thead className="bg-neutral-50 border-b border-neutral-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
                     <div className="flex items-center gap-2">
                       O. Id
                       <svg
@@ -194,7 +196,7 @@ export default function SellerOrders() {
                       </svg>
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
                     <div className="flex items-center gap-2">
                       D. Date
                       <svg
@@ -215,7 +217,7 @@ export default function SellerOrders() {
                       </svg>
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
                     <div className="flex items-center gap-2">
                       O. Date
                       <svg
@@ -236,7 +238,7 @@ export default function SellerOrders() {
                       </svg>
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
                     <div className="flex items-center gap-2">
                       Status
                       <svg
@@ -257,7 +259,7 @@ export default function SellerOrders() {
                       </svg>
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
                     <div className="flex items-center gap-2">
                       Amount
                       <svg
@@ -278,7 +280,7 @@ export default function SellerOrders() {
                       </svg>
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
                     <div className="flex items-center gap-2">
                       Action
                       <svg
@@ -303,7 +305,7 @@ export default function SellerOrders() {
               </thead>
               <tbody className="bg-white divide-y divide-neutral-200">
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-neutral-500">
+                  <td colSpan={6} className="px-3 sm:px-4 md:px-6 py-8 sm:py-12 text-center text-xs sm:text-sm text-neutral-500">
                     No data available in table
                   </td>
                 </tr>
@@ -312,8 +314,8 @@ export default function SellerOrders() {
           </div>
 
           {/* Pagination */}
-          <div className="px-6 py-4 border-t border-neutral-200 flex items-center justify-between">
-            <div className="text-sm text-neutral-700">
+          <div className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 border-t border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+            <div className="text-xs sm:text-sm text-neutral-700">
               Showing 0 to 0 of 0 entries
             </div>
             <div className="flex items-center gap-2">
@@ -365,8 +367,8 @@ export default function SellerOrders() {
       </div>
 
       {/* Footer */}
-      <footer className="px-6 text-center py-6">
-        <p className="text-sm text-neutral-600">
+      <footer className="px-3 sm:px-4 md:px-6 text-center py-4 sm:py-6">
+        <p className="text-xs sm:text-sm text-neutral-600">
           Copyright © 2025. Developed By{' '}
           <Link to="/seller" className="text-blue-600 hover:text-blue-700">
             Appzeto

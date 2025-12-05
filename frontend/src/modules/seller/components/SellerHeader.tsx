@@ -12,10 +12,10 @@ export default function SellerHeader({ onMenuClick, isSidebarOpen }: SellerHeade
   const isActive = (path: string) => location.pathname.includes(path);
 
   return (
-    <header className="bg-white shadow-sm border-b border-neutral-200">
-      <div className="flex items-center justify-between px-6 py-4">
+    <header className="bg-white shadow-sm border-b border-neutral-200 sticky top-0 z-30">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-3 sm:px-4 md:px-6 py-3 sm:py-4 gap-3 sm:gap-0">
         {/* Logo and Hamburger Menu */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
           {/* Hamburger Menu Button */}
           <button
             onClick={onMenuClick}
@@ -44,27 +44,27 @@ export default function SellerHeader({ onMenuClick, isSidebarOpen }: SellerHeade
               </svg>
             )}
           </button>
-          <h1 className="text-lg font-bold text-neutral-900">Appzeto</h1>
+          <h1 className="text-base sm:text-lg font-bold text-neutral-900">Appzeto</h1>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-4 lg:gap-6">
           <button
             onClick={() => navigate('/seller/orders')}
-            className={`relative px-4 py-2 text-sm font-medium transition-colors ${
+            className={`relative px-3 lg:px-4 py-2 text-xs sm:text-sm font-medium transition-colors ${
               isActive('/seller/orders') ? 'text-neutral-900' : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
             Orders
             {!isActive('/seller/orders') && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+              <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] sm:text-xs font-bold">
                 1
               </span>
             )}
           </button>
           <button
             onClick={() => navigate('/seller/return-order')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
+            className={`px-3 lg:px-4 py-2 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
               isActive('/seller/return-order') ? 'text-neutral-900' : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
@@ -72,7 +72,7 @@ export default function SellerHeader({ onMenuClick, isSidebarOpen }: SellerHeade
           </button>
           <button
             onClick={() => navigate('/seller/wallet-transaction')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
+            className={`px-3 lg:px-4 py-2 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
               isActive('/seller/wallet-transaction') ? 'text-neutral-900' : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
@@ -81,7 +81,7 @@ export default function SellerHeader({ onMenuClick, isSidebarOpen }: SellerHeade
         </div>
 
         {/* Action Icons */}
-        <div className="flex items-center gap-4">
+        <div className="hidden sm:flex items-center gap-2 md:gap-4">
           <button className="p-2 text-neutral-600 hover:text-neutral-900 transition-colors">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path

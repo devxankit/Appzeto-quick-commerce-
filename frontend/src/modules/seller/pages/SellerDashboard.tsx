@@ -145,9 +145,9 @@ export default function SellerDashboard() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <DashboardCard icon={userIcon} title="Total User" value={stats.totalUser} accentColor="#3b82f6" />
         <DashboardCard icon={categoryIcon} title="Total Category" value={stats.totalCategory} accentColor="#eab308" />
         <DashboardCard icon={subcategoryIcon} title="Total Subcategory" value={stats.totalSubcategory} accentColor="#ec4899" />
@@ -159,13 +159,13 @@ export default function SellerDashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-2 gap-6">
-        <OrderChart title="Order - Dec 2025" data={stats.orderDataDec2025} maxValue={1} height={600} />
-        <OrderChart title="Order - 2025" data={stats.orderData2025} maxValue={20} height={600} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <OrderChart title="Order - Dec 2025" data={stats.orderDataDec2025} maxValue={1} height={400} />
+        <OrderChart title="Order - 2025" data={stats.orderData2025} maxValue={20} height={400} />
       </div>
 
       {/* Alerts and Button Row */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Alert Cards - Side by Side */}
         <AlertCard icon={soldOutIcon} title="Product Sold Out" value={stats.soldOutProducts} accentColor="#ec4899" />
         <AlertCard icon={lowStockIcon} title="Product low on Stock" value={stats.lowStockProducts} accentColor="#eab308" />
@@ -175,7 +175,7 @@ export default function SellerDashboard() {
       <div className="mt-4">
         <button
           onClick={() => navigate('/seller/orders')}
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 rounded-lg transition-colors shadow-sm"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-colors shadow-sm text-sm sm:text-base"
         >
           View New Orders
         </button>
