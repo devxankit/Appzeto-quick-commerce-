@@ -202,34 +202,77 @@ export default function HomeHero({ activeTab = 'all', onTabChange }: HomeHeroPro
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Update sliding indicator position when activeTab changes
+  // Update sliding indicator position when activeTab changes and scroll to active tab
   useEffect(() => {
-    const updateIndicator = () => {
+    const updateIndicator = (shouldScroll = true) => {
       const activeTabButton = tabRefs.current.get(activeTab);
       const container = tabsContainerRef.current;
       
       if (activeTabButton && container) {
-        const containerRect = container.getBoundingClientRect();
-        const buttonRect = activeTabButton.getBoundingClientRect();
-        
-        const left = buttonRect.left - containerRect.left;
-        const width = buttonRect.width;
-        
-        setIndicatorStyle({ left, width });
+        try {
+          // Use offsetLeft for position relative to container (not affected by scroll)
+          // This ensures the indicator stays aligned even when container scrolls
+          const left = activeTabButton.offsetLeft;
+          const width = activeTabButton.offsetWidth;
+          
+          // Ensure valid values
+          if (width > 0) {
+            setIndicatorStyle({ left, width });
+          }
+
+          // Scroll the container to bring the active tab into view (only when tab changes)
+          if (shouldScroll) {
+            const containerScrollLeft = container.scrollLeft;
+            const containerWidth = container.offsetWidth;
+            const buttonLeft = left;
+            const buttonWidth = width;
+            const buttonRight = buttonLeft + buttonWidth;
+
+            // Calculate scroll position to center the button or keep it visible
+            const scrollPadding = 20; // Padding from edges
+            let targetScrollLeft = containerScrollLeft;
+
+            // If button is on the left side and partially or fully hidden
+            if (buttonLeft < containerScrollLeft + scrollPadding) {
+              targetScrollLeft = buttonLeft - scrollPadding;
+            }
+            // If button is on the right side and partially or fully hidden
+            else if (buttonRight > containerScrollLeft + containerWidth - scrollPadding) {
+              targetScrollLeft = buttonRight - containerWidth + scrollPadding;
+            }
+
+            // Smooth scroll to the target position
+            if (targetScrollLeft !== containerScrollLeft) {
+              container.scrollTo({
+                left: Math.max(0, targetScrollLeft),
+                behavior: 'smooth'
+              });
+            }
+          }
+        } catch (error) {
+          console.warn('Error updating indicator:', error);
+        }
       }
     };
 
-    // Update immediately
-    updateIndicator();
+    // Update immediately with scroll
+    updateIndicator(true);
     
-    // Also update after a short delay to handle any layout shifts
-    const timeout = setTimeout(updateIndicator, 100);
+    // Also update after delays to handle any layout shifts and ensure smooth animation
+    const timeout1 = setTimeout(() => updateIndicator(true), 50);
+    const timeout2 = setTimeout(() => updateIndicator(true), 150);
+    const timeout3 = setTimeout(() => updateIndicator(false), 300); // Last update without scroll to avoid conflicts
     
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      clearTimeout(timeout3);
+    };
   }, [activeTab]);
 
   const handleTabClick = (tabId: string) => {
     onTabChange?.(tabId);
+    // Don't scroll - keep page at current position
   };
 
   const theme = getTheme(activeTab || 'all');
@@ -375,14 +418,17 @@ export default function HomeHero({ activeTab = 'all', onTabChange }: HomeHeroPro
             style={{ paddingBottom: '12px' }}
           >
             {/* Sliding Indicator */}
-            <div
-              className="absolute bottom-0 h-1 bg-neutral-900 rounded-t-md transition-all duration-300 ease-out"
-              style={{
-                left: `${indicatorStyle.left}px`,
-                width: `${indicatorStyle.width}px`,
-                transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}
-            />
+            {indicatorStyle.width > 0 && (
+              <div
+                className="absolute bottom-0 h-1 bg-neutral-900 rounded-t-md transition-all duration-300 ease-out pointer-events-none"
+                style={{
+                  left: `${indicatorStyle.left}px`,
+                  width: `${indicatorStyle.width}px`,
+                  transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  zIndex: 0,
+                }}
+              />
+            )}
             
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -403,10 +449,11 @@ export default function HomeHero({ activeTab = 'all', onTabChange }: HomeHeroPro
                   }
                 }}
                 onClick={() => handleTabClick(tab.id)}
-                className={`flex-shrink-0 flex flex-col items-center min-w-[50px] py-1 relative ${tabColor}`}
+                className={`flex-shrink-0 flex flex-col items-center min-w-[50px] py-1 relative ${tabColor} z-10`}
                 style={{
                   transition: 'color 0.3s ease-out',
                 }}
+                type="button"
               >
                 <div className={`mb-0.5 w-5 h-5 flex items-center justify-center ${tabColor}`} style={{
                   transition: 'color 0.3s ease-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
