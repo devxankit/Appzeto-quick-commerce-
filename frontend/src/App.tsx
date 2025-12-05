@@ -23,6 +23,11 @@ import FashionStore from './pages/FashionStore';
 import ToyStore from './pages/ToyStore';
 import HobbyStore from './pages/HobbyStore';
 import Login from './pages/Login';
+import DeliveryLayout from './modules/delivery/components/DeliveryLayout';
+import DeliveryDashboard from './modules/delivery/pages/DeliveryDashboard';
+import DeliveryOrders from './modules/delivery/pages/DeliveryOrders';
+import DeliveryNotifications from './modules/delivery/pages/DeliveryNotifications';
+import DeliveryMenu from './modules/delivery/pages/DeliveryMenu';
 
 function App() {
   return (
@@ -31,6 +36,18 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
+            {/* Delivery App Routes */}
+            <Route path="/delivery/*" element={
+              <DeliveryLayout>
+                <Routes>
+                  <Route path="" element={<DeliveryDashboard />} />
+                  <Route path="orders" element={<DeliveryOrders />} />
+                  <Route path="notifications" element={<DeliveryNotifications />} />
+                  <Route path="menu" element={<DeliveryMenu />} />
+                </Routes>
+              </DeliveryLayout>
+            } />
+            {/* Main App Routes */}
             <Route path="/*" element={
               <AppLayout>
                 <Routes>
