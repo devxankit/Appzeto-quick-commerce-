@@ -1,0 +1,379 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+export default function SellerOrders() {
+  const [dateRange, setDateRange] = useState('12/05/2025 - 12/05/2025');
+  const [status, setStatus] = useState('All Status');
+  const [entriesPerPage, setEntriesPerPage] = useState('10');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleClearDate = () => {
+    setDateRange('');
+  };
+
+  return (
+    <div className="space-y-6 -mx-6 -mt-6">
+      {/* Header Section */}
+      <div className="bg-white border-b border-neutral-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* Page Title */}
+          <h1 className="text-2xl font-bold text-neutral-900">Orders List</h1>
+          
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm">
+            <Link to="/seller" className="text-blue-600 hover:text-blue-700">
+              Home
+            </Link>
+            <span className="text-neutral-500">/</span>
+            <span className="text-neutral-700">Orders List</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="px-6">
+        {/* White Card Container */}
+        <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+          {/* Green Banner */}
+          <div className="bg-green-600 text-white px-6 py-3 rounded-t-lg">
+            <h2 className="text-lg font-semibold">View Order List</h2>
+          </div>
+
+          {/* Filter and Action Bar */}
+          <div className="px-6 py-4 border-b border-neutral-200">
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Date Range Filter */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-neutral-700 whitespace-nowrap">
+                  From - To Order Date
+                </label>
+                <div className="flex items-center gap-2 bg-neutral-100 border border-neutral-300 rounded px-3 py-2">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="text-neutral-500"
+                  >
+                    <path
+                      d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    value={dateRange}
+                    onChange={(e) => setDateRange(e.target.value)}
+                    className="w-48 text-sm text-neutral-600 bg-transparent focus:outline-none placeholder:text-neutral-400"
+                    placeholder="MM/DD/YYYY - MM/DD/YYYY"
+                  />
+                  {dateRange && (
+                    <button
+                      onClick={handleClearDate}
+                      className="ml-2 px-2 py-1 text-xs font-medium text-neutral-700 bg-neutral-200 hover:bg-neutral-300 rounded transition-colors"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Status Filter */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-neutral-700 whitespace-nowrap">
+                  Status
+                </label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="px-3 py-2 border border-neutral-300 rounded text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option>All Status</option>
+                  <option>Pending</option>
+                  <option>Accepted</option>
+                  <option>On the way</option>
+                  <option>Delivered</option>
+                  <option>Cancelled</option>
+                </select>
+              </div>
+
+              {/* Entries Per Page */}
+              <div className="flex items-center gap-2">
+                <select
+                  value={entriesPerPage}
+                  onChange={(e) => setEntriesPerPage(e.target.value)}
+                  className="px-3 py-2 border border-neutral-300 rounded text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option>10</option>
+                  <option>25</option>
+                  <option>50</option>
+                  <option>100</option>
+                </select>
+              </div>
+
+              {/* Export Button */}
+              <div className="flex items-center gap-2 ml-auto">
+                <button className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15M7 10L12 15M12 15L17 10M12 15V3"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Export
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 9L12 15L18 9"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Search Bar */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-neutral-700 whitespace-nowrap">
+                  Search:
+                </label>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="px-3 py-2 border border-neutral-300 rounded text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  placeholder=""
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-neutral-50 border-b border-neutral-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                      O. Id
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-neutral-400 cursor-pointer"
+                      >
+                        <path
+                          d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                      D. Date
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-neutral-400 cursor-pointer"
+                      >
+                        <path
+                          d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                      O. Date
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-neutral-400 cursor-pointer"
+                      >
+                        <path
+                          d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                      Status
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-neutral-400 cursor-pointer"
+                      >
+                        <path
+                          d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                      Amount
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-neutral-400 cursor-pointer"
+                      >
+                        <path
+                          d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                      Action
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-neutral-400 cursor-pointer"
+                      >
+                        <path
+                          d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-neutral-200">
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-neutral-500">
+                    No data available in table
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          <div className="px-6 py-4 border-t border-neutral-200 flex items-center justify-between">
+            <div className="text-sm text-neutral-700">
+              Showing 0 to 0 of 0 entries
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                disabled
+                className="p-2 border border-neutral-300 rounded text-neutral-400 cursor-not-allowed bg-neutral-50"
+                aria-label="Previous page"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15 18L9 12L15 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <button
+                disabled
+                className="p-2 border border-neutral-300 rounded text-neutral-400 cursor-not-allowed bg-neutral-50"
+                aria-label="Next page"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 18L15 12L9 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="px-6 text-center py-6">
+        <p className="text-sm text-neutral-600">
+          Copyright © 2025. Developed By{' '}
+          <Link to="/seller" className="text-blue-600 hover:text-blue-700">
+            Appzeto
+          </Link>
+        </p>
+      </footer>
+    </div>
+  );
+}
+

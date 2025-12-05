@@ -431,6 +431,7 @@ export default function PromoStrip({ activeTab = 'all' }: PromoStripProps) {
               ref={housefullRef}
               className="text-3xl font-black text-white"
               style={{
+                fontFamily: '"Jacques Francois Shadow", serif',
                 letterSpacing: '1.5px',
                 lineHeight: '1.1',
                 textShadow: 
@@ -469,6 +470,7 @@ export default function PromoStrip({ activeTab = 'all' }: PromoStripProps) {
               ref={saleRef}
               className="text-xl font-black text-white"
               style={{
+                fontFamily: '"Jacques Francois Shadow", serif',
                 letterSpacing: '1.5px',
                 textShadow: 
                   `-1.5px -1.5px 0 ${theme.accentColor}, 1.5px -1.5px 0 ${theme.accentColor}, -1.5px 1.5px 0 ${theme.accentColor}, 1.5px 1.5px 0 ${theme.accentColor}, ` +

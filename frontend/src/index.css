@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent font flash for Rubik Doodle Shadow */
+@font-face {
+  font-family: 'Rubik Doodle Shadow';
+  font-display: swap;
+}
+
 @layer base {
   body {
     @apply bg-neutral-100 text-neutral-900;
@@ -69,5 +75,16 @@ video {
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 

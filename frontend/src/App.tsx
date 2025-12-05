@@ -28,6 +28,9 @@ import DeliveryDashboard from './modules/delivery/pages/DeliveryDashboard';
 import DeliveryOrders from './modules/delivery/pages/DeliveryOrders';
 import DeliveryNotifications from './modules/delivery/pages/DeliveryNotifications';
 import DeliveryMenu from './modules/delivery/pages/DeliveryMenu';
+import SellerLayout from './modules/seller/components/SellerLayout';
+import SellerDashboard from './modules/seller/pages/SellerDashboard';
+import SellerOrders from './modules/seller/pages/SellerOrders';
 
 function App() {
   return (
@@ -46,6 +49,17 @@ function App() {
                   <Route path="menu" element={<DeliveryMenu />} />
                 </Routes>
               </DeliveryLayout>
+            } />
+            {/* Seller App Routes */}
+            <Route path="/seller/*" element={
+              <SellerLayout>
+                <Routes>
+                  <Route path="" element={<SellerDashboard />} />
+                  <Route path="orders" element={<SellerOrders />} />
+                  <Route path="return-order" element={<SellerDashboard />} />
+                  <Route path="wallet-transaction" element={<SellerDashboard />} />
+                </Routes>
+              </SellerLayout>
             } />
             {/* Main App Routes */}
             <Route path="/*" element={

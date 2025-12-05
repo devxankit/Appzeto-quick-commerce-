@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { products } from '../data/products';
@@ -15,6 +15,34 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
   const navigate = useNavigate();
   const { cart, addToCart, updateQuantity } = useCart();
   const [forceUpdate, setForceUpdate] = useState(0); // State to force re-renders
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  // Preload and wait for font to load to prevent FOUT
+  useEffect(() => {
+    if (document.fonts && document.fonts.check) {
+      // Check if font is already loaded
+      if (document.fonts.check('1em "Rubik Doodle Shadow"')) {
+        setFontLoaded(true);
+        return;
+      }
+
+      // Wait for font to load
+      const checkFont = async () => {
+        try {
+          await document.fonts.load('1em "Rubik Doodle Shadow"');
+          setFontLoaded(true);
+        } catch (e) {
+          // Fallback: show after timeout
+          setTimeout(() => setFontLoaded(true), 300);
+        }
+      };
+
+      checkFont();
+    } else {
+      // Fallback for browsers without Font Loading API
+      setTimeout(() => setFontLoaded(true), 300);
+    }
+  }, []);
 
   // Create a wrapper for addToCart that forces re-render
   const handleAddToCart = (product: any, element?: HTMLElement | null) => {
@@ -112,8 +140,11 @@ export default function LowestPricesEver({ activeTab = 'all' }: LowestPricesEver
           <h2 
             className="font-black text-center whitespace-nowrap"
               style={{
+                fontFamily: '"Rubik Doodle Shadow", serif',
                 fontSize: '28px',
-                color: theme.textColor,
+                color: '#000000',
+                opacity: fontLoaded ? 1 : 0,
+                transition: 'opacity 0.2s ease-in',
                 textShadow: 
                   '-1.5px -1.5px 0 white, 1.5px -1.5px 0 white, -1.5px 1.5px 0 white, 1.5px 1.5px 0 white, ' +
                   '-1.5px 0px 0 white, 1.5px 0px 0 white, 0px -1.5px 0 white, 0px 1.5px 0 white, ' +
