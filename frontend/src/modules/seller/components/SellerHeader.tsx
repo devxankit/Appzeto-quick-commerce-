@@ -19,7 +19,7 @@ export default function SellerHeader({ onMenuClick, isSidebarOpen }: SellerHeade
           {/* Hamburger Menu Button */}
           <button
             onClick={onMenuClick}
-            className="p-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+            className="p-2 text-neutral-600 hover:text-neutral-900 transition-colors flex-shrink-0"
             aria-label="Toggle menu"
           >
             {isSidebarOpen ? (
@@ -44,7 +44,13 @@ export default function SellerHeader({ onMenuClick, isSidebarOpen }: SellerHeade
               </svg>
             )}
           </button>
-          <h1 className="text-base sm:text-lg font-bold text-neutral-900">Appzeto</h1>
+          {/* Appzeto Logo */}
+          <img
+            src="/assets/appzeto1.jpeg"
+            alt="Appzeto"
+            className="h-10 sm:h-12 w-auto object-contain"
+            style={{ maxWidth: '200px' }}
+          />
         </div>
 
         {/* Navigation Tabs */}

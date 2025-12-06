@@ -32,6 +32,21 @@ import SellerLayout from './modules/seller/components/SellerLayout';
 import SellerDashboard from './modules/seller/pages/SellerDashboard';
 import SellerOrders from './modules/seller/pages/SellerOrders';
 import SellerOrderDetail from './modules/seller/pages/SellerOrderDetail';
+import SellerPos from './modules/seller/pages/SellerPos';
+import SellerCategory from './modules/seller/pages/SellerCategory';
+import SellerSubCategory from './modules/seller/pages/SellerSubCategory';
+import SellerAddProduct from './modules/seller/pages/SellerAddProduct';
+import SellerBulkImport from './modules/seller/pages/SellerBulkImport';
+import SellerBulkUpdate from './modules/seller/pages/SellerBulkUpdate';
+import SellerTaxes from './modules/seller/pages/SellerTaxes';
+import SellerProductList from './modules/seller/pages/SellerProductList';
+import SellerStockManagement from './modules/seller/pages/SellerStockManagement';
+import SellerWalletTransaction from './modules/seller/pages/SellerWalletTransaction';
+import SellerWithdrawalRequest from './modules/seller/pages/SellerWithdrawalRequest';
+import SellerProductSellingReport from './modules/seller/pages/SellerProductSellingReport';
+import SellerSalesReport from './modules/seller/pages/SellerSalesReport';
+import SellerPosReport from './modules/seller/pages/SellerPosReport';
+import SellerReturnRequest from './modules/seller/pages/SellerReturnRequest';
 
 function App() {
   return (
@@ -58,8 +73,22 @@ function App() {
                   <Route path="" element={<SellerDashboard />} />
                   <Route path="orders" element={<SellerOrders />} />
                   <Route path="orders/:id" element={<SellerOrderDetail />} />
-                  <Route path="return-order" element={<SellerDashboard />} />
-                  <Route path="wallet-transaction" element={<SellerDashboard />} />
+                  <Route path="pos-orders" element={<SellerPos />} />
+                  <Route path="category" element={<SellerCategory />} />
+                  <Route path="subcategory" element={<SellerSubCategory />} />
+                  <Route path="product/add" element={<SellerAddProduct />} />
+                  <Route path="product/bulk-import" element={<SellerBulkImport />} />
+                  <Route path="product/bulk-update" element={<SellerBulkUpdate />} />
+                  <Route path="product/taxes" element={<SellerTaxes />} />
+                  <Route path="product/list" element={<SellerProductList />} />
+                  <Route path="product/stock" element={<SellerStockManagement />} />
+                  <Route path="return" element={<SellerReturnRequest />} />
+                  <Route path="return-order" element={<SellerReturnRequest />} />
+                  <Route path="wallet-transaction" element={<SellerWalletTransaction />} />
+                  <Route path="withdrawal-request" element={<SellerWithdrawalRequest />} />
+                  <Route path="reports/product-selling" element={<SellerProductSellingReport />} />
+                  <Route path="reports/sales" element={<SellerSalesReport />} />
+                  <Route path="reports/pos" element={<SellerPosReport />} />
                 </Routes>
               </SellerLayout>
             } />
