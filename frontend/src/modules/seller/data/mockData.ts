@@ -80,3 +80,181 @@ export const getSellerDashboardStats = (): SellerDashboardStats => {
   };
 };
 
+export interface OrderDetailItem {
+  srNo: number;
+  product: string;
+  soldBy: string;
+  unit: string;
+  price: number;
+  tax: number;
+  taxPercent: number;
+  qty: number;
+  subtotal: number;
+}
+
+export interface SellerOrderDetail {
+  id: number;
+  invoiceNumber: string;
+  orderDate: string;
+  deliveryDate: string;
+  timeSlot: string;
+  status: 'Out For Delivery' | 'Received' | 'Payment Pending' | 'Cancelled';
+  items: OrderDetailItem[];
+}
+
+export const getOrderDetailById = (id: number): SellerOrderDetail | null => {
+  // Mock order detail data
+  const mockOrders: Record<number, SellerOrderDetail> = {
+    1: {
+      id: 1,
+      invoiceNumber: 'INV-2025-001',
+      orderDate: '2025-01-15',
+      deliveryDate: '2025-01-16',
+      timeSlot: '10:00 AM - 12:00 PM',
+      status: 'Out For Delivery',
+      items: [
+        {
+          srNo: 1,
+          product: 'Fresh Tomatoes',
+          soldBy: 'Appzeto Store',
+          unit: '1 kg',
+          price: 80.00,
+          tax: 14.40,
+          taxPercent: 18.00,
+          qty: 2,
+          subtotal: 160.00,
+        },
+        {
+          srNo: 2,
+          product: 'Organic Onions',
+          soldBy: 'Appzeto Store',
+          unit: '1 kg',
+          price: 60.00,
+          tax: 10.80,
+          taxPercent: 18.00,
+          qty: 1,
+          subtotal: 60.00,
+        },
+        {
+          srNo: 3,
+          product: 'Premium Basmati Rice',
+          soldBy: 'Appzeto Store',
+          unit: '1 kg',
+          price: 120.00,
+          tax: 21.60,
+          taxPercent: 18.00,
+          qty: 1,
+          subtotal: 120.00,
+        },
+      ],
+    },
+    2: {
+      id: 2,
+      invoiceNumber: 'INV-2025-002',
+      orderDate: '2025-01-14',
+      deliveryDate: '2025-01-15',
+      timeSlot: '2:00 PM - 4:00 PM',
+      status: 'Received',
+      items: [
+        {
+          srNo: 1,
+          product: 'Fresh Milk',
+          soldBy: 'Appzeto Store',
+          unit: '1 L',
+          price: 65.00,
+          tax: 11.70,
+          taxPercent: 18.00,
+          qty: 2,
+          subtotal: 130.00,
+        },
+      ],
+    },
+  };
+
+  return mockOrders[id] || null;
+};
+
+export interface NewOrder {
+  id: number;
+  orderDate: string;
+  status: 'Out For Delivery' | 'Received' | 'Payment Pending' | 'Cancelled';
+  amount: number;
+}
+
+export const getNewOrders = (): NewOrder[] => {
+  return [
+    {
+      id: 1,
+      orderDate: '2025-01-15',
+      status: 'Out For Delivery',
+      amount: 340.00,
+    },
+    {
+      id: 2,
+      orderDate: '2025-01-14',
+      status: 'Received',
+      amount: 141.70,
+    },
+    {
+      id: 3,
+      orderDate: '2025-01-13',
+      status: 'Payment Pending',
+      amount: 250.50,
+    },
+    {
+      id: 4,
+      orderDate: '2025-01-12',
+      status: 'Out For Delivery',
+      amount: 180.00,
+    },
+    {
+      id: 5,
+      orderDate: '2025-01-11',
+      status: 'Received',
+      amount: 420.75,
+    },
+    {
+      id: 6,
+      orderDate: '2025-01-10',
+      status: 'Cancelled',
+      amount: 150.00,
+    },
+    {
+      id: 7,
+      orderDate: '2025-01-09',
+      status: 'Out For Delivery',
+      amount: 275.30,
+    },
+    {
+      id: 8,
+      orderDate: '2025-01-08',
+      status: 'Payment Pending',
+      amount: 195.50,
+    },
+    {
+      id: 9,
+      orderDate: '2025-01-07',
+      status: 'Received',
+      amount: 320.00,
+    },
+    {
+      id: 10,
+      orderDate: '2025-01-06',
+      status: 'Out For Delivery',
+      amount: 210.25,
+    },
+    {
+      id: 11,
+      orderDate: '2025-01-05',
+      status: 'Received',
+      amount: 380.00,
+    },
+    {
+      id: 12,
+      orderDate: '2025-01-04',
+      status: 'Payment Pending',
+      amount: 165.75,
+    },
+  ];
+};
+

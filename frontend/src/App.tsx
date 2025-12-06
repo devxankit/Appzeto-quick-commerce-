@@ -31,6 +31,7 @@ import DeliveryMenu from './modules/delivery/pages/DeliveryMenu';
 import SellerLayout from './modules/seller/components/SellerLayout';
 import SellerDashboard from './modules/seller/pages/SellerDashboard';
 import SellerOrders from './modules/seller/pages/SellerOrders';
+import SellerOrderDetail from './modules/seller/pages/SellerOrderDetail';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
                 <Routes>
                   <Route path="" element={<SellerDashboard />} />
                   <Route path="orders" element={<SellerOrders />} />
+                  <Route path="orders/:id" element={<SellerOrderDetail />} />
                   <Route path="return-order" element={<SellerDashboard />} />
                   <Route path="wallet-transaction" element={<SellerDashboard />} />
                 </Routes>

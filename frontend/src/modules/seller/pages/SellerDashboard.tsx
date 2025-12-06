@@ -1,12 +1,36 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardCard from '../components/DashboardCard';
 import OrderChart from '../components/OrderChart';
 import AlertCard from '../components/AlertCard';
-import { getSellerDashboardStats } from '../data/mockData';
+import { getSellerDashboardStats, getNewOrders, NewOrder } from '../data/mockData';
 
 export default function SellerDashboard() {
   const navigate = useNavigate();
   const stats = getSellerDashboardStats();
+  const newOrders = getNewOrders();
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const getStatusBadgeClass = (status: NewOrder['status']) => {
+    switch (status) {
+      case 'Out For Delivery':
+        return 'text-blue-800 bg-blue-100 border border-blue-400';
+      case 'Received':
+        return 'text-blue-600 bg-blue-50';
+      case 'Payment Pending':
+        return 'text-orange-600 bg-orange-50';
+      case 'Cancelled':
+        return 'text-red-600 bg-pink-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
+    }
+  };
+
+  const totalPages = Math.ceil(newOrders.length / entriesPerPage);
+  const startIndex = (currentPage - 1) * entriesPerPage;
+  const endIndex = startIndex + entriesPerPage;
+  const displayedOrders = newOrders.slice(startIndex, endIndex);
 
   // Icons for KPI cards
   const userIcon = (
@@ -171,14 +195,234 @@ export default function SellerDashboard() {
         <AlertCard icon={lowStockIcon} title="Product low on Stock" value={stats.lowStockProducts} accentColor="#eab308" />
       </div>
       
-      {/* View New Orders Button */}
-      <div className="mt-4">
-        <button
-          onClick={() => navigate('/seller/orders')}
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-colors shadow-sm text-sm sm:text-base"
-        >
-          View New Orders
-        </button>
+      {/* View New Orders Table Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
+        {/* Teal Header Bar */}
+        <div className="bg-teal-600 text-white px-4 sm:px-6 py-3">
+          <h2 className="text-base sm:text-lg font-semibold">View New Orders</h2>
+        </div>
+
+        {/* Show Entries Control */}
+        <div className="px-4 sm:px-6 py-3 border-b border-neutral-200">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-neutral-700">Show</span>
+            <input
+              type="number"
+              value={entriesPerPage}
+              onChange={(e) => {
+                const value = parseInt(e.target.value) || 10;
+                setEntriesPerPage(Math.max(1, Math.min(100, value)));
+                setCurrentPage(1);
+              }}
+              className="w-16 px-2 py-1 border border-neutral-300 rounded text-sm text-neutral-900 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500"
+              min="1"
+              max="100"
+            />
+            <span className="text-sm text-neutral-700">entries</span>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[600px]">
+            <thead className="bg-neutral-50 border-b border-neutral-200">
+              <tr>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <div className="flex items-center gap-2">
+                    O. Date
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="text-neutral-400 cursor-pointer"
+                    >
+                      <path
+                        d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <div className="flex items-center gap-2">
+                    Status
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="text-neutral-400 cursor-pointer"
+                    >
+                      <path
+                        d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <div className="flex items-center gap-2">
+                    Amount
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="text-neutral-400 cursor-pointer"
+                    >
+                      <path
+                        d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
+                  <div className="flex items-center gap-2">
+                    Action
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="text-neutral-400 cursor-pointer"
+                    >
+                      <path
+                        d="M7 10L12 5L17 10M7 14L12 19L17 14"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-neutral-200">
+              {displayedOrders.map((order) => (
+                <tr key={order.id} className="hover:bg-neutral-50">
+                  <td className="px-4 sm:px-6 py-3 text-sm text-neutral-900">{order.id}</td>
+                  <td className="px-4 sm:px-6 py-3 text-sm text-neutral-600">{order.orderDate}</td>
+                  <td className="px-4 sm:px-6 py-3">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="px-4 sm:px-6 py-3 text-sm text-neutral-900">₹ {order.amount}</td>
+                  <td className="px-4 sm:px-6 py-3">
+                    <button
+                      onClick={() => navigate(`/seller/orders/${order.id}`)}
+                      className="bg-teal-600 hover:bg-teal-700 text-white p-2 rounded transition-colors"
+                      aria-label="View order details"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11 5C6 5 2 8.58 2 13C2 17.42 6 21 11 21C16 21 20 17.42 20 13C20 8.58 16 5 11 5Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11 9C12.1046 9 13 9.89543 13 11C13 12.1046 12.1046 13 11 13C9.89543 13 9 12.1046 9 11C9 9.89543 9.89543 9 11 9Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination Footer */}
+        <div className="px-4 sm:px-6 py-3 border-t border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+          <div className="text-xs sm:text-sm text-neutral-700">
+            Showing {startIndex + 1} to {Math.min(endIndex, newOrders.length)} of {newOrders.length} entries
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+              className={`p-2 border border-neutral-300 rounded ${
+                currentPage === 1
+                  ? 'text-neutral-400 cursor-not-allowed bg-neutral-50'
+                  : 'text-neutral-700 hover:bg-neutral-50'
+              }`}
+              aria-label="Previous page"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+              className={`p-2 border border-neutral-300 rounded ${
+                currentPage === totalPages
+                  ? 'text-neutral-400 cursor-not-allowed bg-neutral-50'
+                  : 'text-neutral-700 hover:bg-neutral-50'
+              }`}
+              aria-label="Next page"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
